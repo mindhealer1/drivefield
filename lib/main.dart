@@ -1,9 +1,20 @@
 // File: lib/main.dart
 import 'package:flutter/material.dart';
 import 'core/navigator_core.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'models/drive_entry.dart';
 
-void main() {
-  runApp(DriveFieldApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialise Hive and register the adapter
+  await Hive.initFlutter();
+  Hive.registerAdapter(DriveEntryAdapter());
+
+  // Open the box that will store daily check‑ins
+  await Hive.openBox<DriveEntry>('drive_entries');
+
+  runApp(const DriveFieldApp());
 }
 
 class DriveFieldApp extends StatelessWidget {
